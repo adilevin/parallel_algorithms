@@ -26,22 +26,27 @@ class cached_summation_leaf;
 class cached_summation_node
 {
 public:
+	// Tree construction
 	cached_summation_node();
+	void add_child(cached_summation_node* child);
+	int get_num_of_children();
 
+	// Summation
+	virtual int get_or_calc_sum();
+
+protected:
+	void invalidate_cache_of_all_ancestors(); // For tests only
+private:
+	int calc_sum_from_children();
+	void append_leaves(std::vector<cached_summation_leaf*>& leaves);
 	int get_cached_sum() const;
 	bool is_cache_valid() const;
 	void validate_cache();
 	void invalidate_cache();
-	int get_num_of_children();
-	std::vector<cached_summation_leaf*> get_all_leaves();
 	void invalidate_cache_in_all_descendants();
-	void add_child(cached_summation_node* child);
+	std::vector<cached_summation_leaf*> get_all_leaves();
 	cached_summation_node* get_child(int index);
-	virtual int get_or_calc_sum();
-	void invalidate_cache_of_all_ancestors();
-private:
-	int calc_sum_from_children();
-	void append_leaves(std::vector<cached_summation_leaf*>& leaves);
+	friend class cached_summation_tests;
 private:			
 	cached_summation_node* parent;
 	cached_summation_node* children[2];
