@@ -26,8 +26,7 @@ class cached_summation_leaf;
 class cached_summation_node
 {
 public:
-	// Tree construction
-	cached_summation_node();
+	static cached_summation_node* build_full_binary_tree(int depth); // depth=0 is just a leaf. depth=1 has two leaves, etc...
 	void add_child(cached_summation_node* child);
 	int get_num_of_children();
 
@@ -35,6 +34,8 @@ public:
 	virtual int get_or_calc_sum();
 
 protected:
+	cached_summation_node();
+	virtual ~cached_summation_node() {}
 	void invalidate_cache_of_all_ancestors(); // For tests only
 private:
 	int calc_sum_from_children();
@@ -58,10 +59,14 @@ private:
 class cached_summation_leaf : public cached_summation_node
 {
 public:
-	cached_summation_leaf() : value(0) {}
 	int get_value() const { return value; }
 	void increment_value();
 	virtual int get_or_calc_sum();
+private:
+	cached_summation_leaf() : value(0) {}
+	virtual ~cached_summation_leaf() {}
+	friend static cached_summation_node* cached_summation_node::build_full_binary_tree(int depth);
+	friend class cached_summation_tests;
 private:
 	int value;
 };

@@ -103,3 +103,15 @@ int cached_summation_leaf::get_or_calc_sum()
 {
 	return value;
 }
+
+cached_summation_node* cached_summation_node::build_full_binary_tree(int depth)
+{
+	if (depth==0)
+		return new cached_summation_leaf;
+	else {
+		auto* node = new cached_summation_node;
+		node->add_child(build_full_binary_tree(depth-1));
+		node->add_child(build_full_binary_tree(depth-1));
+		return node;
+	}
+}

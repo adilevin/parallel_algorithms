@@ -122,21 +122,9 @@ public:
 
 private:
 
-	cached_summation_node* build_full_binary_tree(int depth)
-	{
-		if (depth==0)
-			return new cached_summation_leaf;
-		else {
-			auto* node = new cached_summation_node;
-			node->add_child(build_full_binary_tree(depth-1));
-			node->add_child(build_full_binary_tree(depth-1));
-			return node;
-		}
-	}
-
 	void validate_summation_correctness(int depth, int num_increments)
 	{
-		auto* root = build_full_binary_tree(depth);
+		auto* root = cached_summation_node::build_full_binary_tree(depth);
 		auto leaves = root->get_all_leaves();
 		Assert::IsTrue(leaves.size()==1<<depth);
 
